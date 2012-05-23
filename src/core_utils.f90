@@ -37,7 +37,8 @@ contains
     real, intent(in) :: T_max, T_min, dT
     
     integer, intent(in) :: n
-    integer, dimension(:,:), allocatable, intent(in) :: nnb, nbh
+    integer, dimension(:,:), allocatable, intent(in) :: nbh
+    integer, dimension(:), allocatable, intent(in) :: nnb
     
     real, intent(in) :: J_ex, norm_s
     
@@ -50,7 +51,7 @@ contains
     character (len = 30) :: fname
     
     integer :: i, j, k
-    real :: E, Et, E1, E2
+    real :: E, Et, E1, E2, dE
     real, dimension(3) :: mag, magt, st
     real, dimension(:,:), allocatable :: s
     real :: p, T
@@ -111,7 +112,7 @@ contains
     close (1)
     end subroutine mag_curves
 
-    subroutine hist_loop (    						&
+    subroutine hyst_loop (    						&
     	T,     										&
     	n, nnb, nbh,								&
     	J_ex, norm_s,								&
@@ -123,11 +124,13 @@ contains
     real, intent(in) :: T
     
     integer, intent(in) :: n
-    integer, dimension(:,:), allocatable, intent(in) :: nnb, nbh
+    integer, dimension(:,:), allocatable, intent(in) :: nbh
+    integer, dimension(:), allocatable, intent(in) :: nnb
     
     real, intent(in) :: J_ex, norm_s
     
-    real, intent(in) :: norm_B_max, dnorm_B
+    real, intent(in) :: norm_B_max
+    real :: dnorm_B
     real, dimension(3), intent(in) :: dir_B
     
     integer, intent(in) :: mcs_max, mcs_c
@@ -136,7 +139,7 @@ contains
     character (len = 30) :: fname
     
     integer :: i, j, k, id = 0
-    real :: E, Et, E1, E2
+    real :: E, Et, E1, E2, dE
     real, dimension(3) :: mag, magt, st
     real, dimension(:,:), allocatable :: s
     real :: p, norm_B
@@ -203,6 +206,6 @@ contains
 	end do
     
     close (1)
-    end subroutine hist_loop
+    end subroutine hyst_loop
 
 end module core_utils

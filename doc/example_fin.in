@@ -1,0 +1,26 @@
+&LATTICE
+    W = 10,                             ! width of the lattice in unit cells
+    H = 10,                             ! heigh of the lattice in unit cells
+    L = 4,                              ! lenght of the lattice in unit cells
+    PBC = 3*1,                          ! periodic boundary conditions
+    LT_TYPE = "s",                      ! lattice type valid arguments are "s", "f", "b" and "h"
+    RC = 1.1000000,                     ! cut off matching the nearest neigbors
+    /
+
+&PHYSICAL
+    T_MAX = 1000.0000,                  ! maximum temperature for magnetization curves
+    T_MIN = 0.0000000,                  ! minimum temperature for magnetization curves
+    DT = 10.000000,                     ! temperature step for magnetization curves
+    T = 200.00000,                      ! temperature for hysteresis loops
+    NORM_B_MAX = 20.000000,             ! maximum field for hysteresis loops
+    DIR_B = 2*0.0000000, 1.0000000,     ! magnetic field direction
+    NORM_B = 10.000000,                 ! magnetic field norm for magnetization curves
+    DNORM_B = 0.50000000,               ! magnetic field step for hysteresis loops
+    J_EX = 5.5000000,                   ! exchange integral constant trough the simulation
+    NORM_S = 1.5000000,                 ! magnetig moment norm per site
+    /
+
+&MONTE
+    MCS_C = 5000,                       ! cut - off monte carlo step
+    MCS_MAX = 10000,                    ! maximum monte carlo steps
+    /
