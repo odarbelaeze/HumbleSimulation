@@ -48,7 +48,7 @@ contains
     integer, intent(in) :: mcs_max, mcs_c
     real, intent(in) :: k_B
     
-    character (len = 50) :: fname
+    character (len = 30) :: fname
     
     integer :: i, j, k
     real :: E, Et, E1, E2, dE
@@ -136,7 +136,7 @@ contains
     integer, intent(in) :: mcs_max, mcs_c
     real, intent(in) :: k_B
     
-    character (len = 50) :: fname
+    character (len = 30) :: fname
     
     integer :: i, j, k, id = 0
     real :: E, Et, E1, E2, dE

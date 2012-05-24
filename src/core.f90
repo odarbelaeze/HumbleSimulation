@@ -173,7 +173,7 @@ call mag_curves (    	    &
 	J_ex, norm_s,			&
 	norm_B, dir_B,			&
 	mcs_max, mcs_c, k_B,	&
-	f_out				&
+	trim(f_out)				&
 )
 
 ! hysteresis
@@ -186,7 +186,7 @@ call hyst_loop (    			    	&
 	J_ex, norm_s,						&
 	norm_B_max, dnorm_B, dir_B,	        &
 	mcs_max, mcs_c, k_B,				&
-	f_out				    		&
+	trim(f_out)				    		&
 )
 
 
