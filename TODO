@@ -1,0 +1,2 @@
+fix the problem with the write line in core_utils.f90
+is showing T (constant) each time instead of norm_B
