@@ -29,12 +29,13 @@ contains
 	subroutine estabilize(              &
 		T, norm_B, dir_B, mcs,          &
 		s, smp,                         &
+	    ek, norm_k,                     &
 		n, nnb, nbh,                    &
 		energy                          &
 	)
 	
-	real, intent(in) :: T, norm_B
-	real, intent(in), dimension(3) :: dir_B
+	real, intent(in) :: T, norm_B, norm_k
+	real, intent(in), dimension(3) :: dir_B, ek
 	real, intent(in), dimension(:), allocatable :: smp
 	real, intent(inout), dimension(:,:), allocatable :: s
 	integer, intent(in) :: mcs, n
@@ -57,6 +58,9 @@ contains
             call cheap_rand_changed_vec (st, s(i,:))
             E1 = - dot_product (norm_B * dir_B, s(i,:))
             E2 = - dot_product (norm_B * dir_B, st)
+            
+            E1 = - dot_product (norm_k * ek, s(i,:)) ** 2
+            E2 = - dot_product (norm_k * ek, st) ** 2
             
             do j = 1, nnb(i)
                 E1 = E1 - (smp(i) + smp(j)) * dot_product (s(i,:), s(nbh(i,j),:))
@@ -87,15 +91,16 @@ contains
 	
 	end subroutine estabilize
 	
-	subroutine measure(              &
+	subroutine measure(                 &
 	    T, norm_B, dir_B, mcs,          &
 	    s, smp,                         &
+	    ek, norm_k,                     &
 	    n, nnb, nbh,                    &
 	    energy, mag                     &
 	)
 	
-	real, intent(in) :: T, norm_B
-	real, intent(in), dimension(3) :: dir_B
+	real, intent(in) :: T, norm_B, norm_k
+	real, intent(in), dimension(3) :: dir_B, ek
 	real, intent(in), dimension(:), allocatable :: smp
 	real, intent(inout), dimension(:,:), allocatable :: s
 	integer, intent(in) :: mcs, n
@@ -119,6 +124,9 @@ contains
             call cheap_rand_changed_vec (st, s(i,:))
             E1 = - dot_product (norm_B * dir_B, s(i,:))
             E2 = - dot_product (norm_B * dir_B, st)
+            
+            E1 = E1 - dot_product (norm_k * ek, s(i,:)) ** 2
+            E2 = E2 - dot_product (norm_k * ek, st) ** 2
             
             do j = 1, nnb(i)
                 E1 = E1 - (smp(i) + smp(j)) * dot_product (s(i,:), s(nbh(i,j),:))

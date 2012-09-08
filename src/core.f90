@@ -41,13 +41,14 @@ real :: rc
 ! Physical stuff
 
 real, dimension (:,:), allocatable :: s
-real, dimension (3) :: dir_B, mag, magt
+real, dimension (:),   allocatable :: smp
+real, dimension (3) :: dir_B, mag, magt, ek
 real :: T_max, T_min, T, J_ex, dT
-real :: norm_B_max, norm_B, dnorm_B, norm_s
+real :: norm_B_max, norm_B, dnorm_B, norm_s, norm_k
 
 ! Monte Carlo stuff
 
-integer :: mcs_max, mcs_c
+integer :: mcs_max, mcs_c, mcs
 
 ! Boltzmann constant
 
@@ -58,6 +59,11 @@ real, parameter :: k_B = 8.617E-2
 integer :: argc
 character (len = 50) :: f_in, path, f_out
 logical :: ex
+
+! Measure instruments
+
+real, dimension(:,:), allocatable :: magnetization
+real, dimension(:),   allocatable :: energy
 
 ! Namelists
 
@@ -159,35 +165,72 @@ do i = 1, n
     end do
 end do
 
+call init_random_seed()
+    
+allocate (s(n,3), smp(n))
+
+do i = 1, n
+    call rdn_vec (s(i,:), norm_s)
+end do
+
+where (r(:,3) < 5)
+    smp = 3.00
+else where
+    smp = - 4.00
+end where
+
 ! Deallocating unnecesary variables
 
 deallocate (d, r)
 
 ! magnetization 
 
-f_out = trim(path) // "/mag_curves.out"
+ek  = (/ 0, 0, 1 /)
+norm_k = 4
 
-call mag_curves (           &
-    T_max, T_min, dT,       &
-    n, nnb, nbh,            &
-    J_ex, norm_s,           &
-    norm_B, dir_B,          &
-    mcs_max, mcs_c, k_B,    &
-    f_out               &
-)
+do norm_B = 0, norm_B_max, dnorm_B
 
-! hysteresis
+    call measure(                       &
+        T, norm_B, dir_B, 25,         &
+        s, smp,                         &
+	    ek, norm_k,                     &
+        n, nnb, nbh,                    &
+        energy, magnetization           &
+    )
+    
+    write (*,*) norm_B, sum(energy) / 25, sum(magnetization(:,3)) / 25
 
-f_out = trim(path) // "/hyst_loop.out"
+end do
 
-call hyst_loop (                        &
-    T,                                  &
-    n, nnb, nbh,                        &
-    J_ex, norm_s,                       &
-    norm_B_max, dnorm_B, dir_B,         &
-    mcs_max, mcs_c, k_B,                &
-    f_out                           &
-)
+do norm_B = norm_B_max, - norm_B_max, - dnorm_B
+
+    call measure(                       &
+        T, norm_B, dir_B, 25,         &
+        s, smp,                         &
+	    ek, norm_k,                     &
+        n, nnb, nbh,                    &
+        energy, magnetization           &
+    )
+    
+    write (*,*) norm_B, sum(energy) / 25, sum(magnetization(:,3)) / 25
+
+end do
+
+do norm_B = - norm_B_max, norm_B_max, dnorm_B
+
+    call measure(                       &
+        T, norm_B, dir_B, 25,         &
+        s, smp,                         &
+	    ek, norm_k,                     &
+        n, nnb, nbh,                    &
+        energy, magnetization           &
+    )
+    
+    write (*,*) norm_B, sum(energy) / 25, sum(magnetization(:,3)) / 25
+
+end do
+
+
 
 
 end program core
