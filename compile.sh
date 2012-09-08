@@ -9,5 +9,3 @@ gfortran -g -fbounds-check -O3 -o HumbleSimulation core.f90 core_utils.o lattice
 mv -u HumbleSimulation ../
 mv -u *.mod ../lib
 mv -u *.o ../bin
-
-reset

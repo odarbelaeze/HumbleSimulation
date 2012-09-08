@@ -25,6 +25,132 @@ implicit none
 
 contains
 
+
+	subroutine estabilize(              &
+		T, norm_B, dir_B, mcs,          &
+		s, smp,                         &
+		n, nnb, nbh,                    &
+		energy                          &
+	)
+	
+	real, intent(in) :: T, norm_B
+	real, intent(in), dimension(3) :: dir_B
+	real, intent(in), dimension(:), allocatable :: smp
+	real, intent(inout), dimension(:,:), allocatable :: s
+	integer, intent(in) :: mcs, n
+	integer, intent(in), dimension(:,:), allocatable :: nbh
+	integer, intent(in), dimension(:), allocatable :: nnb
+	
+	real, intent (out), dimension(:), allocatable :: energy
+	
+	real :: dE, E1, E2, Et, p
+	real, dimension(3) :: magt, mag, st
+	integer :: i, j, k
+	
+	allocate (energy(mcs))
+	
+	do k = 1, mcs
+        Et = 0.0
+        magt = 0.0
+        
+        do i = 1, n
+            call cheap_rand_changed_vec (st, s(i,:))
+            E1 = - dot_product (norm_B * dir_B, s(i,:))
+            E2 = - dot_product (norm_B * dir_B, st)
+            
+            do j = 1, nnb(i)
+                E1 = E1 - (smp(i) + smp(j)) * dot_product (s(i,:), s(nbh(i,j),:))
+                E2 = E2 - (smp(i) + smp(j)) * dot_product (st,     s(nbh(i,j),:))
+            end do
+            
+            dE = E2 - E1
+            if (dE .le. 0) then
+                s(i,:) = st
+                Et = Et + E2
+            else
+                call random_number (p)
+                if (p .le. exp(- dE / T)) then
+                    s(i,:) = st
+                    Et = Et + E2
+                else
+                    Et = Et + E1
+                end if
+            end if
+            magt = magt + s(i,:)
+        end do
+
+        
+        energy(k) = Et
+        mag = mag + (magt / n)
+        
+    end do
+	
+	end subroutine estabilize
+	
+	subroutine measure(              &
+	    T, norm_B, dir_B, mcs,          &
+	    s, smp,                         &
+	    n, nnb, nbh,                    &
+	    energy, mag                     &
+	)
+	
+	real, intent(in) :: T, norm_B
+	real, intent(in), dimension(3) :: dir_B
+	real, intent(in), dimension(:), allocatable :: smp
+	real, intent(inout), dimension(:,:), allocatable :: s
+	integer, intent(in) :: mcs, n
+	integer, intent(in), dimension(:,:), allocatable :: nbh
+	integer, intent(in), dimension(:), allocatable :: nnb
+	
+	real, intent (out), dimension(:), allocatable :: energy
+	real, intent (out), dimension(:,:), allocatable :: mag
+	
+	real :: dE, E1, E2, Et, p
+	real, dimension(3) :: magt, st
+	integer :: i, j, k
+	
+	allocate (energy(mcs), mag(mcs, 3))
+	
+	do k = 1, mcs
+        Et = 0.0
+        magt = 0.0
+        
+        do i = 1, n
+            call cheap_rand_changed_vec (st, s(i,:))
+            E1 = - dot_product (norm_B * dir_B, s(i,:))
+            E2 = - dot_product (norm_B * dir_B, st)
+            
+            do j = 1, nnb(i)
+                E1 = E1 - (smp(i) + smp(j)) * dot_product (s(i,:), s(nbh(i,j),:))
+                E2 = E2 - (smp(i) + smp(j)) * dot_product (st,     s(nbh(i,j),:))
+            end do
+            
+            dE = E2 - E1
+            if (dE .le. 0) then
+                s(i,:) = st
+                Et = Et + E2
+            else
+                call random_number (p)
+                if (p .le. exp(- dE / T)) then
+                    s(i,:) = st
+                    Et = Et + E2
+                else
+                    Et = Et + E1
+                end if
+            end if
+            magt = magt + s(i,:)
+        end do
+
+        
+        energy(k) = Et
+        mag(k,:) = magt
+        
+    end do
+	
+	end subroutine measure
+	
+	
+
     subroutine mag_curves (     &
         T_max, T_min, dT,       &
         n, nnb, nbh,            &
