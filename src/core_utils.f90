@@ -25,13 +25,13 @@ implicit none
 
 contains
 
-    subroutine mag_curves (    	&
-    	T_max, T_min, dT,     	&
-    	n, nnb, nbh,			&
-    	J_ex, norm_s,			&
-    	norm_B, dir_B,			&
-    	mcs_max, mcs_c, k_B,	&
-    	fname					&
+    subroutine mag_curves (     &
+        T_max, T_min, dT,       &
+        n, nnb, nbh,            &
+        J_ex, norm_s,           &
+        norm_B, dir_B,          &
+        mcs_max, mcs_c, k_B,    &
+        fname                   &
     )
     
     real, intent(in) :: T_max, T_min, dT
@@ -58,67 +58,67 @@ contains
     
     call init_random_seed()
     
-   	allocate (s(n,3))
-   	do i = 1, n
-   		call rdn_vec (s(i,:), norm_s)
-   	end do
+    allocate (s(n,3))
+    do i = 1, n
+        call rdn_vec (s(i,:), norm_s)
+    end do
 
     open(1, file = trim(fname), status = 'new')
     
     do T = T_max, T_min, - dT   
-		E = 0.0
-		mag = 0.0
-		
-		do k = 1, mcs_max
-		    Et = 0.0
-		    magt = 0.0
-		    
-		    do i = 1, n
-		        call cheap_rand_changed_vec (st, s(i,:))
-		        E1 = - dot_product (norm_B * dir_B, s(i,:))
-		        E2 = - dot_product (norm_B * dir_B, st)
-		        
-		        do j = 1, nnb(i)
-		            E1 = E1 - J_ex * dot_product (s(i,:), s(nbh(i,j),:))
-		            E2 = E2 - J_ex * dot_product (st,     s(nbh(i,j),:))
-		        end do
-		        
-		        dE = E2 - E1
-		        if (dE .le. 0) then
-		            s(i,:) = st
-		            Et = Et + E2
-		        else
-		            call random_number (p)
-		            if (p .le. exp(- dE / (k_B * T))) then
-		                s(i,:) = st
-		                Et = Et + E2
-		            else
-		                Et = Et + E1
-		            end if
-		        end if
-		        magt = magt + s(i,:)
-		    end do
+        E = 0.0
+        mag = 0.0
+        
+        do k = 1, mcs_max
+            Et = 0.0
+            magt = 0.0
+            
+            do i = 1, n
+                call cheap_rand_changed_vec (st, s(i,:))
+                E1 = - dot_product (norm_B * dir_B, s(i,:))
+                E2 = - dot_product (norm_B * dir_B, st)
+                
+                do j = 1, nnb(i)
+                    E1 = E1 - J_ex * dot_product (s(i,:), s(nbh(i,j),:))
+                    E2 = E2 - J_ex * dot_product (st,     s(nbh(i,j),:))
+                end do
+                
+                dE = E2 - E1
+                if (dE .le. 0) then
+                    s(i,:) = st
+                    Et = Et + E2
+                else
+                    call random_number (p)
+                    if (p .le. exp(- dE / (k_B * T))) then
+                        s(i,:) = st
+                        Et = Et + E2
+                    else
+                        Et = Et + E1
+                    end if
+                end if
+                magt = magt + s(i,:)
+            end do
 
-		    if (k > mcs_c) then
-		        E = E + Et / n
-		        mag = mag + (magt / n)
-		    end if
-		end do
+            if (k > mcs_c) then
+                E = E + Et / n
+                mag = mag + (magt / n)
+            end if
+        end do
 
-		write (1,*) T, mag/(mcs_max - mcs_c), E/(mcs_max - mcs_c)
-		write (*,*) T, mag/(mcs_max - mcs_c), E/(mcs_max - mcs_c)
-	end do
+        write (1,*) T, mag/(mcs_max - mcs_c), E/(mcs_max - mcs_c)
+        write (*,*) T, mag/(mcs_max - mcs_c), E/(mcs_max - mcs_c)
+    end do
     
     close (1)
     end subroutine mag_curves
 
-    subroutine hyst_loop (    						&
-    	T,     										&
-    	n, nnb, nbh,								&
-    	J_ex, norm_s,								&
-    	norm_B_max, dnorm_B, dir_B,		            &
-    	mcs_max, mcs_c, k_B,						&
-    	fname										&
+    subroutine hyst_loop (                          &
+        T,                                          &
+        n, nnb, nbh,                                &
+        J_ex, norm_s,                               &
+        norm_B_max, dnorm_B, dir_B,                 &
+        mcs_max, mcs_c, k_B,                        &
+        fname                                       &
     )
     
     real, intent(in) :: T
@@ -146,64 +146,64 @@ contains
     
     call init_random_seed()
     
-   	allocate (s(n,3))
-   	do i = 1, n
-   		call rdn_vec (s(i,:), norm_s)
-   	end do
+    allocate (s(n,3))
+    do i = 1, n
+        call rdn_vec (s(i,:), norm_s)
+    end do
 
     open(1, file = trim(fname), status = 'new')
  
     do while (id .le. 2)   
-		E = 0.0
-		mag = 0.0
-		
-		do k = 1, mcs_max
-		    Et = 0.0
-		    magt = 0.0
-		    
-		    do i = 1, n
-		        call cheap_rand_changed_vec (st, s(i,:))
-		        E1 = - dot_product (norm_B * dir_B, s(i,:))
-		        E2 = - dot_product (norm_B * dir_B, st)
-		        
-		        do j = 1, nnb(i)
-		            E1 = E1 - J_ex * dot_product (s(i,:), s(nbh(i,j),:))
-		            E2 = E2 - J_ex * dot_product (st,     s(nbh(i,j),:))
-		        end do
-		        
-		        dE = E2 - E1
-		        if (dE .le. 0) then
-		            s(i,:) = st
-		            Et = Et + E2
-		        else
-		            call random_number (p)
-		            if (p .le. exp(- dE / (k_B * T))) then
-		                s(i,:) = st
-		                Et = Et + E2
-		            else
-		                Et = Et + E1
-		            end if
-		        end if
-		        magt = magt + s(i,:)
-		    end do
+        E = 0.0
+        mag = 0.0
+        
+        do k = 1, mcs_max
+            Et = 0.0
+            magt = 0.0
+            
+            do i = 1, n
+                call cheap_rand_changed_vec (st, s(i,:))
+                E1 = - dot_product (norm_B * dir_B, s(i,:))
+                E2 = - dot_product (norm_B * dir_B, st)
+                
+                do j = 1, nnb(i)
+                    E1 = E1 - J_ex * dot_product (s(i,:), s(nbh(i,j),:))
+                    E2 = E2 - J_ex * dot_product (st,     s(nbh(i,j),:))
+                end do
+                
+                dE = E2 - E1
+                if (dE .le. 0) then
+                    s(i,:) = st
+                    Et = Et + E2
+                else
+                    call random_number (p)
+                    if (p .le. exp(- dE / (k_B * T))) then
+                        s(i,:) = st
+                        Et = Et + E2
+                    else
+                        Et = Et + E1
+                    end if
+                end if
+                magt = magt + s(i,:)
+            end do
 
-		    if (k > mcs_c) then
-		        E = E + Et / n
-		        mag = mag + (magt / n)
-		    end if
-		end do
+            if (k > mcs_c) then
+                E = E + Et / n
+                mag = mag + (magt / n)
+            end if
+        end do
 
-		write (1,*) T, mag/(mcs_max - mcs_c), E/(mcs_max - mcs_c)
-		write (*,*) T, mag/(mcs_max - mcs_c), E/(mcs_max - mcs_c)
-		
-		if (abs(norm_B) .gt. norm_B_max) then
+        write (1,*) T, mag/(mcs_max - mcs_c), E/(mcs_max - mcs_c)
+        write (*,*) T, mag/(mcs_max - mcs_c), E/(mcs_max - mcs_c)
+        
+        if (abs(norm_B) .gt. norm_B_max) then
             dnorm_B = - dnorm_B
             id = id + 1
         end if
         
         norm_B = norm_B + dnorm_B
-		
-	end do
+        
+    end do
     
     close (1)
     end subroutine hyst_loop

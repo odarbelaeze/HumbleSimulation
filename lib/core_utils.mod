@@ -1,5 +1,5 @@
-GFORTRAN module version '6' created from core_utils.f90 on Wed May 23 18:02:21 2012
-MD5:e5d010ab667f1e185fc35cc5e17f017d -- If you edit this, you'll get what you deserve.
+GFORTRAN module version '6' created from core_utils.f90 on Fri Sep  7 23:42:13 2012
+MD5:81a8b2c3e4d15bcc2966aeabec9a2ab4 -- If you edit this, you'll get what you deserve.
 
 (() () () () () () () () () () () () () () () () () () () () () () ()
 () () () ())
@@ -40,20 +40,6 @@ UNKNOWN-PROC UNKNOWN UNKNOWN 0 0) (UNKNOWN 0 0 0 UNKNOWN ()) 0 0 () () 0
 45 'rdn_vec' 'rdn_utils' 'rdn_vec' 1 ((PROCEDURE UNKNOWN-INTENT
 MODULE-PROC DECL UNKNOWN 0 0 SUBROUTINE IMPLICIT_PURE) (UNKNOWN 0 0 0
 UNKNOWN ()) 46 0 (47 48) () 0 () () () 0 0)
-25 't_max' '' 't_max' 24 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
-DUMMY) (REAL 4 0 0 REAL ()) 0 0 () () 0 () () () 0 0)
-26 't_min' '' 't_min' 24 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
-DUMMY) (REAL 4 0 0 REAL ()) 0 0 () () 0 () () () 0 0)
-27 'dt' '' 'dt' 24 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0 DUMMY)
-(REAL 4 0 0 REAL ()) 0 0 () () 0 () () () 0 0)
-28 'n' '' 'n' 24 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0 DUMMY) (
-INTEGER 4 0 0 INTEGER ()) 0 0 () () 0 () () () 0 0)
-29 'nnb' '' 'nnb' 24 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
-ALLOCATABLE DIMENSION DUMMY) (INTEGER 4 0 0 INTEGER ()) 0 0 () (1 0
-DEFERRED () ()) 0 () () () 0 0)
-30 'nbh' '' 'nbh' 24 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
-ALLOCATABLE DIMENSION DUMMY) (INTEGER 4 0 0 INTEGER ()) 0 0 () (2 0
-DEFERRED () () () ()) 0 () () () 0 0)
 5 'vec' '' 'vec' 3 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
 DIMENSION DUMMY) (REAL 4 0 0 REAL ()) 0 0 () (1 0 EXPLICIT (CONSTANT (
 INTEGER 4 0 0 INTEGER ()) 0 '1') (CONSTANT (INTEGER 4 0 0 INTEGER ()) 0
@@ -78,6 +64,20 @@ INTEGER 4 0 0 INTEGER ()) 0 '1') (CONSTANT (INTEGER 4 0 0 INTEGER ()) 0
 '3')) 0 () () () 0 0)
 43 'r' '' 'r' 40 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0 DUMMY) (
 REAL 4 0 0 REAL ()) 0 0 () () 0 () () () 0 0)
+25 't_max' '' 't_max' 24 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
+DUMMY) (REAL 4 0 0 REAL ()) 0 0 () () 0 () () () 0 0)
+26 't_min' '' 't_min' 24 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
+DUMMY) (REAL 4 0 0 REAL ()) 0 0 () () 0 () () () 0 0)
+27 'dt' '' 'dt' 24 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0 DUMMY)
+(REAL 4 0 0 REAL ()) 0 0 () () 0 () () () 0 0)
+28 'n' '' 'n' 24 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0 DUMMY) (
+INTEGER 4 0 0 INTEGER ()) 0 0 () () 0 () () () 0 0)
+29 'nnb' '' 'nnb' 24 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
+ALLOCATABLE DIMENSION DUMMY) (INTEGER 4 0 0 INTEGER ()) 0 0 () (1 0
+DEFERRED () ()) 0 () () () 0 0)
+30 'nbh' '' 'nbh' 24 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
+ALLOCATABLE DIMENSION DUMMY) (INTEGER 4 0 0 INTEGER ()) 0 0 () (2 0
+DEFERRED () () () ()) 0 () () () 0 0)
 31 'j_ex' '' 'j_ex' 24 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
 DUMMY) (REAL 4 0 0 REAL ()) 0 0 () () 0 () () () 0 0)
 32 'norm_s' '' 'norm_s' 24 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0
@@ -96,11 +96,11 @@ DUMMY) (INTEGER 4 0 0 INTEGER ()) 0 0 () () 0 () () () 0 0)
 DUMMY) (REAL 4 0 0 REAL ()) 0 0 () () 0 () () () 0 0)
 38 'fname' '' 'fname' 24 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC UNKNOWN
 UNKNOWN 0 0 DUMMY) (CHARACTER 1 0 0 CHARACTER ((CONSTANT (INTEGER 4 0 0
-INTEGER ()) 0 '30'))) 0 0 () () 0 () () () 0 0)
-10 'n' '' 'n' 8 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0 DUMMY) (
-INTEGER 4 0 0 INTEGER ()) 0 0 () () 0 () () () 0 0)
+INTEGER ()) 0 '50'))) 0 0 () () 0 () () () 0 0)
 9 't' '' 't' 8 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0 DUMMY) (
 REAL 4 0 0 REAL ()) 0 0 () () 0 () () () 0 0)
+10 'n' '' 'n' 8 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0 DUMMY) (
+INTEGER 4 0 0 INTEGER ()) 0 0 () () 0 () () () 0 0)
 11 'nnb' '' 'nnb' 8 ((VARIABLE IN UNKNOWN-PROC UNKNOWN UNKNOWN 0 0
 ALLOCATABLE DIMENSION DUMMY) (INTEGER 4 0 0 INTEGER ()) 0 0 () (1 0
 DEFERRED () ()) 0 () () () 0 0)
@@ -127,7 +127,7 @@ DUMMY) (INTEGER 4 0 0 INTEGER ()) 0 0 () () 0 () () () 0 0)
 (REAL 4 0 0 REAL ()) 0 0 () () 0 () () () 0 0)
 21 'fname' '' 'fname' 8 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC UNKNOWN
 UNKNOWN 0 0 DUMMY) (CHARACTER 1 0 0 CHARACTER ((CONSTANT (INTEGER 4 0 0
-INTEGER ()) 0 '30'))) 0 0 () () 0 () () () 0 0)
+INTEGER ()) 0 '50'))) 0 0 () () 0 () () () 0 0)
 )
 
 ('cheap_rand_changed_vec' 0 2 'core_utils' 0 6 'hyst_loop' 0 7

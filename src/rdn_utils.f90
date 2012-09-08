@@ -25,10 +25,10 @@ contains
 
 subroutine rdn_vec (rv, norm)
 
-	real, dimension (3), intent (out) :: rv
-	real, intent (in) :: norm
+    real, dimension (3), intent (out) :: rv
+    real, intent (in) :: norm
 
-	call random_number (rv)
+    call random_number (rv)
     rv = rv - 0.5
     rv = norm * rv / sqrt (sum (rv ** 2))
 
@@ -51,7 +51,7 @@ subroutine rand_changed_vec (rcv, vec, r)
 
     rcv = norm * rcv / sqrt (sum (rcv ** 2))
 
-end	subroutine rand_changed_vec
+end subroutine rand_changed_vec
 
 subroutine cheap_rand_changed_vec (rcv, vec)
 
@@ -68,24 +68,24 @@ subroutine cheap_rand_changed_vec (rcv, vec)
     rcv = vec + rtemp
     rcv = norm * rcv / sqrt (sum (rcv ** 2))
 
-end	subroutine cheap_rand_changed_vec
+end subroutine cheap_rand_changed_vec
 
 !TODO: Change subroutine init_random_seed.
 
 subroutine init_random_seed ()
 
-	integer :: i, n, clock
-	integer, allocatable, dimension (:) :: seed
+    integer :: i, n, clock
+    integer, allocatable, dimension (:) :: seed
 
-	call random_seed (size = n)
-	allocate (seed (n))
+    call random_seed (size = n)
+    allocate (seed (n))
 
-	call system_clock (count = clock)
-	seed = clock + 37 * (/ (i - 1, i = 1, n) /)
+    call system_clock (count = clock)
+    seed = clock + 37 * (/ (i - 1, i = 1, n) /)
 
-	call random_seed(put = seed)
-	deallocate (seed)
+    call random_seed(put = seed)
+    deallocate (seed)
 
-end	subroutine init_random_seed
+end subroutine init_random_seed
 
 end module rdn_utils

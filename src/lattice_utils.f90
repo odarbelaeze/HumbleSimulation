@@ -25,21 +25,21 @@ contains
 
 subroutine lt_sc (r, w, h, l, n)
 
-	real, allocatable, dimension (:,:), intent (out) :: r
-	integer, intent (in) :: w, h, l
-	integer, optional, intent (out) :: n
-	integer :: id = 1, i, j, k
+    real, allocatable, dimension (:,:), intent (out) :: r
+    integer, intent (in) :: w, h, l
+    integer, optional, intent (out) :: n
+    integer :: id = 1, i, j, k
 
-	n = w * h * l
-	allocate (r(n,3))
+    n = w * h * l
+    allocate (r(n,3))
 
-	do i = 0, w - 1
-		do j = 0, h - 1
-			do k = 0, l - 1
-				r(id, :)  = (/ i, j, k /) + (/ 0.0, 0.0, 0.0 /); id = id + 1
-			end do
-		end do
-	end do
+    do i = 0, w - 1
+        do j = 0, h - 1
+            do k = 0, l - 1
+                r(id, :)  = (/ i, j, k /) + (/ 0.0, 0.0, 0.0 /); id = id + 1
+            end do
+        end do
+    end do
 
 
 
@@ -47,67 +47,67 @@ end subroutine lt_sc
 
 subroutine lt_bcc (r, w, h, l, n)
 
-	real, allocatable, dimension (:,:), intent (out) :: r
-	integer, intent (in) :: w, h, l
-	integer, optional, intent (out) :: n
-	integer :: id = 1, i, j, k
-	n = 2 * w * h * l
-	allocate (r(n,3))
+    real, allocatable, dimension (:,:), intent (out) :: r
+    integer, intent (in) :: w, h, l
+    integer, optional, intent (out) :: n
+    integer :: id = 1, i, j, k
+    n = 2 * w * h * l
+    allocate (r(n,3))
 
-	do i = 0, w - 1
-		do j = 0, h - 1
-			do k = 0, l - 1
-				r(id, :)  = (/ i, j, k /) + (/ 0.0, 0.0, 0.0 /); id = id + 1
-				r(id, :)  = (/ i, j, k /) + (/ 0.5, 0.5, 0.5 /); id = id + 1
-			end do
-		end do
-	end do
+    do i = 0, w - 1
+        do j = 0, h - 1
+            do k = 0, l - 1
+                r(id, :)  = (/ i, j, k /) + (/ 0.0, 0.0, 0.0 /); id = id + 1
+                r(id, :)  = (/ i, j, k /) + (/ 0.5, 0.5, 0.5 /); id = id + 1
+            end do
+        end do
+    end do
 
 end subroutine lt_bcc
 
 subroutine lt_fcc (r, w, h, l, n)
 
-	real, allocatable, dimension (:,:), intent (out) :: r
-	integer, intent (in) :: w, h, l
-	integer, optional, intent (out) :: n
-	integer :: id = 1, i, j, k
-	n = 4 * w * h * l
-	allocate (r(n,3))
+    real, allocatable, dimension (:,:), intent (out) :: r
+    integer, intent (in) :: w, h, l
+    integer, optional, intent (out) :: n
+    integer :: id = 1, i, j, k
+    n = 4 * w * h * l
+    allocate (r(n,3))
 
-	do i = 0, w - 1
-		do j = 0, h - 1
-			do k = 0, l - 1
-				r(id, :)  = (/ i, j, k /) + (/ 0.0, 0.0, 0.0 /); id = id + 1
-				r(id, :)  = (/ i, j, k /) + (/ 0.5, 0.0, 0.0 /); id = id + 1
-				r(id, :)  = (/ i, j, k /) + (/ 0.0, 0.5, 0.0 /); id = id + 1
-				r(id, :)  = (/ i, j, k /) + (/ 0.0, 0.0, 0.5 /); id = id + 1
-			end do
-		end do
-	end do
+    do i = 0, w - 1
+        do j = 0, h - 1
+            do k = 0, l - 1
+                r(id, :)  = (/ i, j, k /) + (/ 0.0, 0.0, 0.0 /); id = id + 1
+                r(id, :)  = (/ i, j, k /) + (/ 0.5, 0.0, 0.0 /); id = id + 1
+                r(id, :)  = (/ i, j, k /) + (/ 0.0, 0.5, 0.0 /); id = id + 1
+                r(id, :)  = (/ i, j, k /) + (/ 0.0, 0.0, 0.5 /); id = id + 1
+            end do
+        end do
+    end do
 
 end subroutine lt_fcc
 
 subroutine lt_hcp (r, w, h, l, n)
 
-	real, allocatable, dimension (:,:), intent (out) :: r
-	integer, intent (in) :: w, h, l
-	integer, optional, intent (out) :: n
-	integer :: id = 1, i, j, k
-	n = 6 * w * h * l
-	allocate (r(n,3))
+    real, allocatable, dimension (:,:), intent (out) :: r
+    integer, intent (in) :: w, h, l
+    integer, optional, intent (out) :: n
+    integer :: id = 1, i, j, k
+    n = 6 * w * h * l
+    allocate (r(n,3))
 
-	do i = 0, w - 1
-		do j = 0, h - 1
-			do k = 0, l - 1
-				r(id, :)  = (/ i, j, k /) + (/ 0.0, 0.0, 0.0 /); id = id + 1
-				r(id, :)  = (/ i, j, k /) + (/ 0.5, 0.5, 0.0 /); id = id + 1
-				r(id, :)  = (/ i, j, k /) + (/ 0.5 * sqrt(2.0), 0.5 * sqrt(2.0), 0.5 /); id = id + 1
-				r(id, :)  = (/ i, j, k /) + (/ 0.5 * sqrt(2.0) + 0.5, 0.5 * sqrt(2.0), 0.5 /); id = id + 1
-				r(id, :)  = (/ i, j, k /) + (/ 0.5 * sqrt(2.0), 0.5 * sqrt(2.0) + 0.5, 0.5 /); id = id + 1
-				r(id, :)  = (/ i, j, k /) + (/ 0.5 * sqrt(2.0), 0.5 * sqrt(2.0), 0.0 /) + 0.5; id = id + 1
-			end do
-		end do
-	end do
+    do i = 0, w - 1
+        do j = 0, h - 1
+            do k = 0, l - 1
+                r(id, :)  = (/ i, j, k /) + (/ 0.0, 0.0, 0.0 /); id = id + 1
+                r(id, :)  = (/ i, j, k /) + (/ 0.5, 0.5, 0.0 /); id = id + 1
+                r(id, :)  = (/ i, j, k /) + (/ 0.5 * sqrt(2.0), 0.5 * sqrt(2.0), 0.5 /); id = id + 1
+                r(id, :)  = (/ i, j, k /) + (/ 0.5 * sqrt(2.0) + 0.5, 0.5 * sqrt(2.0), 0.5 /); id = id + 1
+                r(id, :)  = (/ i, j, k /) + (/ 0.5 * sqrt(2.0), 0.5 * sqrt(2.0) + 0.5, 0.5 /); id = id + 1
+                r(id, :)  = (/ i, j, k /) + (/ 0.5 * sqrt(2.0), 0.5 * sqrt(2.0), 0.0 /) + 0.5; id = id + 1
+            end do
+        end do
+    end do
 
 end subroutine lt_hcp
 

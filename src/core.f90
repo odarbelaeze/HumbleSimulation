@@ -167,26 +167,26 @@ deallocate (d, r)
 
 f_out = trim(path) // "/mag_curves.out"
 
-call mag_curves (    	    &
-	T_max, T_min, dT,     	&
-	n, nnb, nbh,			&
-	J_ex, norm_s,			&
-	norm_B, dir_B,			&
-	mcs_max, mcs_c, k_B,	&
-	f_out				&
+call mag_curves (           &
+    T_max, T_min, dT,       &
+    n, nnb, nbh,            &
+    J_ex, norm_s,           &
+    norm_B, dir_B,          &
+    mcs_max, mcs_c, k_B,    &
+    f_out               &
 )
 
 ! hysteresis
 
 f_out = trim(path) // "/hyst_loop.out"
 
-call hyst_loop (    			    	&
-	T,     								&
-	n, nnb, nbh,						&
-	J_ex, norm_s,						&
-	norm_B_max, dnorm_B, dir_B,	        &
-	mcs_max, mcs_c, k_B,				&
-	f_out				    		&
+call hyst_loop (                        &
+    T,                                  &
+    n, nnb, nbh,                        &
+    J_ex, norm_s,                       &
+    norm_B_max, dnorm_B, dir_B,         &
+    mcs_max, mcs_c, k_B,                &
+    f_out                           &
 )
 
 
