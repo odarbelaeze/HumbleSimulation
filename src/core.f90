@@ -226,8 +226,7 @@ if (trim(work) == "hloop") then
             energy, magnetization           &
         )
         
-        write (*,*) norm_B, sum(energy) /   & 
-            mcs_c, sum(sqrt(magnetization(:,1) ** 2 + magnetization(:,2) ** 2 + magnetization(:,3) ** 2)) / mcs_c
+        write (*,*) norm_B, sum(energy) / mcs_c, sum(magnetization(:,3)) / mcs_c
 
     end do
 
@@ -245,7 +244,8 @@ else if (trim(work) == "magcurv") then
             energy, magnetization           &
         )
         
-        write (*,*) T, sum(energy) / mcs_c, sum(magnetization(:,3)) / mcs_c
+        write (*,*) T, sum(energy) / mcs_c,  & 
+            sum(sqrt(magnetization(:,1) ** 2 + magnetization(:,2) ** 2 + magnetization(:,3) ** 2)) / mcs_c
     end do
 
 else

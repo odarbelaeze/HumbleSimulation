@@ -59,8 +59,8 @@ contains
             E1 = - dot_product (norm_B * dir_B, s(i,:))
             E2 = - dot_product (norm_B * dir_B, st)
             
-            E1 = - dot_product (norm_k * ek, s(i,:)) ** 2
-            E2 = - dot_product (norm_k * ek, st) ** 2
+            E1 = - norm_k * dot_product (ek, s(i,:)) ** 2
+            E2 = - norm_k * dot_product (ek, st) ** 2
             
             do j = 1, nnb(i)
                 E1 = E1 - (smp(i) + smp(j)) * dot_product (s(i,:), s(nbh(i,j),:))
@@ -125,8 +125,8 @@ contains
             E1 = - dot_product (norm_B * dir_B, s(i,:))
             E2 = - dot_product (norm_B * dir_B, st)
             
-            E1 = E1 - dot_product (norm_k * ek, s(i,:)) ** 2
-            E2 = E2 - dot_product (norm_k * ek, st) ** 2
+            E1 = E1 - norm_k * dot_product (ek, s(i,:)) ** 2
+            E2 = E2 - norm_k * dot_product (ek, st) ** 2
             
             do j = 1, nnb(i)
                 E1 = E1 - (smp(i) + smp(j)) * dot_product (s(i,:), s(nbh(i,j),:))
