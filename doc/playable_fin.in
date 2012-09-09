@@ -17,9 +17,11 @@
 	DNORM_B    = 0.5000000,
 	J_EX       = -5.5000000,
 	NORM_S     = 1.5000000,
+	smp_val    = 3.5,
+	norm_k     = 3.0,
 /
 
 &MONTE
-	MCS_C   = 5000,
+	MCS_C   = 100,
 	MCS_MAX = 10000,
 /

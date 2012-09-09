@@ -44,7 +44,7 @@ real, dimension (:,:), allocatable :: s
 real, dimension (:),   allocatable :: smp
 real, dimension (3) :: dir_B, mag, magt, ek
 real :: T_max, T_min, T, J_ex, dT
-real :: norm_B_max, norm_B, dnorm_B, norm_s, norm_k
+real :: norm_B_max, norm_B, dnorm_B, norm_s, norm_k, smp_val
 
 ! Monte Carlo stuff
 
@@ -57,7 +57,7 @@ real, parameter :: k_B = 8.617E-2
 ! File names
 
 integer :: argc
-character (len = 50) :: f_in, path, f_out
+character (len = 50) :: f_in, work, f_out
 logical :: ex
 
 ! Measure instruments
@@ -70,7 +70,7 @@ real, dimension(:),   allocatable :: energy
 namelist /Lattice/ w, h, l, pbc, lt_type, rc
 namelist /Physical/ T_max, T_min, dT, T,                    &
                     norm_B_max, dir_B, norm_B, dnorm_B,     &
-                    J_ex, norm_s
+                    J_ex, norm_s, smp_val, norm_k
 namelist /Monte/ mcs_c, mcs_max
 
 ! Setting default variables
@@ -78,7 +78,7 @@ namelist /Monte/ mcs_c, mcs_max
 w = 10; h = 10; l = 4; pbc = 1.0; lt_type = 's'; rc = 1.1
 T_max = 1000; T_min = 0; dT = 10; T = 200
 norm_B_max = 20; dir_B = (/ 0,0,1 /); norm_B = 10.0; dnorm_B = 0.5
-J_ex = 5.5; norm_s = 1.5
+J_ex = 5.5; norm_s = 1.5; smp_val = 3.0; norm_k = 4.0
 mcs_c = 5000; mcs_max = 10000
 
 ! Checking comand line arguments
@@ -86,22 +86,22 @@ mcs_c = 5000; mcs_max = 10000
 argc = iargc()
 
 if (argc .lt. 2) then
-    write(*,*) "You must especify at least a file input and a path for output..."
+    write(*,*) "# You must especify at least a file input and a work for output..."
     call exit(1)
 end if
 
 call getarg(1, f_in)
-call getarg(2, path)
+call getarg(2, work)
 
 if (access(trim(f_in), 'r') .ne. 0) then
-    write(*,*) "You don't have the permissions to read: ", trim(f_in)
+    write(*,*) "# You don't have the permissions to read: ", trim(f_in)
     call exit(2)
 end if
 
-if (access(trim(path) // "/.", ' ') .ne. 0) then
-    write(*,*) "The folder: ", trim(path), " doesn't exist and will be created."
-    call system("mkdir " // trim(path))
-end if
+! if (access(trim(path) // "/.", ' ') .ne. 0) then
+!     write(*,*) "# The folder: ", trim(path), " doesn't exist and will be created."
+!     call system("mkdir " // trim(path))
+! end if
 
 ! Reading namelists from file
 
@@ -118,28 +118,28 @@ close(1)
 select case (lt_type)
     case ('s') ! Stands for sc
         call lt_sc (r, w, h, l, n)
-        write (*,*) "Lattice created succesfully: ", lt_type
+        write (*,*) "# Lattice created succesfully: ", lt_type
     case ('b') ! Stands for bcc
         call lt_bcc (r, w, h, l, n)
-        write (*,*) "Lattice created succesfully: ", lt_type
+        write (*,*) "# Lattice created succesfully: ", lt_type
     case ('f') ! Stands for fcc
         call lt_fcc (r, w, h, l, n)
-        write (*,*) "Lattice created succesfully: ", lt_type
+        write (*,*) "# Lattice created succesfully: ", lt_type
     case ('h') ! Stands for hcp
         call lt_hcp (r, w, h, l, n)
-        write (*,*) "Lattice created succesfully: ", lt_type
+        write (*,*) "# Lattice created succesfully: ", lt_type
     case default
-        write (*,*) "Lattice not known: ", lt_type
+        write (*,*) "# Lattice not known: ", lt_type
         call exit(4)
 end select
 
 ! Plotting lattice file
 
-open (1, file = trim(path) // "/structure.out", status = "unknown")
-do i = 1, n
-    write (1,*) r(i,:)
-end do
-close(1)
+! open (1, file = trim(path) // "/structure.out", status = "unknown")
+! do i = 1, n
+!     write (1,*) r(i,:)
+! end do
+! close(1)
 
 ! Calculating boundary conditions
 
@@ -173,11 +173,7 @@ do i = 1, n
     call rdn_vec (s(i,:), norm_s)
 end do
 
-where (r(:,3) < 5)
-    smp = 3.00
-else where
-    smp = - 4.00
-end where
+smp = smp_val
 
 ! Deallocating unnecesary variables
 
@@ -186,51 +182,76 @@ deallocate (d, r)
 ! magnetization 
 
 ek  = (/ 0, 0, 1 /)
-norm_k = 4
 
-do norm_B = 0, norm_B_max, dnorm_B
+if (trim(work) == "hloop") then
 
-    call measure(                       &
-        T, norm_B, dir_B, 25,         &
-        s, smp,                         &
-	    ek, norm_k,                     &
-        n, nnb, nbh,                    &
-        energy, magnetization           &
-    )
-    
-    write (*,*) norm_B, sum(energy) / 25, sum(magnetization(:,3)) / 25
+    write(*,*) "# Writing hysteresys loop..."
+    write(*,*) "# With velocity: ", mcs_c
 
-end do
+    do norm_B = 0, norm_B_max, dnorm_B
 
-do norm_B = norm_B_max, - norm_B_max, - dnorm_B
+        call measure(                       &
+            T, norm_B, dir_B, mcs_c,        &
+            s, smp,                         &
+    	    ek, norm_k,                     &
+            n, nnb, nbh,                    &
+            energy, magnetization           &
+        )
+        
+        write (*,*) norm_B, sum(energy) / mcs_c, sum(magnetization(:,3)) / mcs_c
 
-    call measure(                       &
-        T, norm_B, dir_B, 25,         &
-        s, smp,                         &
-	    ek, norm_k,                     &
-        n, nnb, nbh,                    &
-        energy, magnetization           &
-    )
-    
-    write (*,*) norm_B, sum(energy) / 25, sum(magnetization(:,3)) / 25
+    end do
 
-end do
+    do norm_B = norm_B_max, - norm_B_max, - dnorm_B
 
-do norm_B = - norm_B_max, norm_B_max, dnorm_B
+        call measure(                       &
+            T, norm_B, dir_B, mcs_c,        &
+            s, smp,                         &
+    	    ek, norm_k,                     &
+            n, nnb, nbh,                    &
+            energy, magnetization           &
+        )
+        
+        write (*,*) norm_B, sum(energy) / mcs_c, sum(magnetization(:,3)) / mcs_c
 
-    call measure(                       &
-        T, norm_B, dir_B, 25,         &
-        s, smp,                         &
-	    ek, norm_k,                     &
-        n, nnb, nbh,                    &
-        energy, magnetization           &
-    )
-    
-    write (*,*) norm_B, sum(energy) / 25, sum(magnetization(:,3)) / 25
+    end do
 
-end do
+    do norm_B = - norm_B_max, norm_B_max, dnorm_B
 
+        call measure(                       &
+            T, norm_B, dir_B, mcs_c,        &
+            s, smp,                         &
+    	    ek, norm_k,                     &
+            n, nnb, nbh,                    &
+            energy, magnetization           &
+        )
+        
+        write (*,*) norm_B, sum(energy) /   & 
+            mcs_c, sum(sqrt(magnetization(:,1) ** 2 + magnetization(:,2) ** 2 + magnetization(:,3) ** 2)) / mcs_c
 
+    end do
 
+else if (trim(work) == "magcurv") then
+
+    write(*,*) "# Writing magnetization curves..."
+    write(*,*) "# With velocity: ", mcs_c
+
+    do T = T_max, T_min, - dT
+        call measure(                       &
+            T, norm_B, dir_B, mcs_c,        &
+            s, smp,                         &
+            ek, norm_k,                     &
+            n, nnb, nbh,                    &
+            energy, magnetization           &
+        )
+        
+        write (*,*) T, sum(energy) / mcs_c, sum(magnetization(:,3)) / mcs_c
+    end do
+
+else
+
+    write(*,*) "# Sorry unknown work:", work
+
+end if
 
 end program core
